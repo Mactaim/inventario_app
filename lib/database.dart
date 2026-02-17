@@ -15,8 +15,9 @@ class DatabaseHelper {
     );
   }
 
-  // Insertar un registro nuevo
-  static Future<void> insertarRegistro(String producto, String cantidad, String unidad) async {
+  // Insertar un registro nuevo con fecha explícita
+  static Future<void> insertarRegistro(
+      String producto, String cantidad, String unidad, String fecha) async {
     final db = await openDB();
     await db.insert(
       'registros',
@@ -24,7 +25,7 @@ class DatabaseHelper {
         'producto': producto,
         'cantidad': cantidad,
         'unidad': unidad,
-        'fecha': DateTime.now().toString(),
+        'fecha': fecha, // 👈 ahora se usa la fecha que viene de main.dart
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'database.dart'; // Importamos la base de datos
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'database.dart'; // Tu helper para SQLite en móvil
 
 void main() {
   runApp(MyApp());
@@ -11,124 +13,29 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Lista de productos actualizada y depurada
-  final List<String> productos = [
-    "Bolsas para hacer chantilly",
-    "Bolsas de basura grande",
-    "Queso dambo",
-    "Queso cheddar",
-    "Pechugas de pollo",
-    "Alitas",
-    "Tocino",
-    "Carne molida",
-    "Hot dog",
-    "Jamón inglés",
-    "Chorizo",
-    "Pan multigrano",
-    "Pan de molde blanco",
-    "Croissant",
-    "Ciabatta",
-    "Pan hamburguesa",
-    "Pan broche",
-    "Papa",
-    "Palta",
-    "Tomate",
-    "Lechuga",
-    "Cebolla",
-    "Apio",
-    "Albaca",
-    "Culantro",
-    "Limón",
-    "Mango",
-    "Piña fresca",
-    "Piña en lata",
-    "Papaya",
-    "Fresa fresca",
-    "Fresa para waffle",
-    "Plátano",
-    "Lucuma",
-    "Maracuyá fresca",
-    "Maracuyá en caja",
-    "Jugo de maracuyá",
-    "Azúcar blanca",
-    "Azúcar rubia",
-    "Azúcar glass",
-    "Azúcar impalpable",
-    "Harina",
-    "Avena",
-    "Miel",
-    "Aceite",
-    "Oliva",
-    "Vinagre",
-    "Orégano",
-    "Vainilla",
-    "Huevo",
-    "Leche",
-    "Mantequilla",
-    "Chantilly",
-    "Fudge",
-    "Ketchup balde",
-    "Mostaza balde",
-    "Salsa BBQ",
-    "Salsa acevichada",
-    "Salsa de tomate",
-    "Jarabe de goma",
-    "Jarabe de menta",
-    "Matcha",
-    "Togarashi",
-    "Ayudín",
-    "Taper chico para llevar",
-    "Bolsa papel delivery (pequeño y grande)",
-    "Bolsa celofán 7x10",
-    "Bolsa para llevar",
-    "Vasos acrílicos",
-    "Vasos de jugo transparentes 18 oz",
-    "Vasito de helados",
-    "Vaso de frappe",
-    "Cucharitas descartables",
-    "Sorbetes para jugo",
-    "Cañas frappe",
-    "Servilletas",
-    "Papel manteca",
-    "Papel toalla cocina",
-    "Papel toalla baño",
-    "Pañitos amarillos",
-    "Galleta Oreo",
-    "Rosquitas",
-    "Pecanas",
-    "Bouls para producción",
-    "Lapicero azul o negro",
-    "Cuaderno para lista",
-    "Hielo",
-    "Agua con gas",
-    "Agua sin gas",
-    "Coca Cola",
-    "Inca Kola"
-  ];
+  final List<String> productos = [/* ... tu lista completa ... */];
 
-  // Set para marcar productos ya registrados
   Set<String> productosMarcados = {};
+  List<Map<String, String>> registrosPendientes = []; // 👈 lista temporal
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Inventario Diario',
       theme: ThemeData(
-        primaryColor: Color(0xFF6B4226), // Marrón café
-        scaffoldBackgroundColor: Color(0xFFF5E6D3), // Fondo beige claro
+        primaryColor: Color(0xFF6B4226),
+        scaffoldBackgroundColor: Color(0xFFF5E6D3),
         appBarTheme: AppBarTheme(
-          backgroundColor: Color(0xFF6B4226), // Barra superior marrón
-          foregroundColor: Colors.white, // Texto blanco
+          backgroundColor: Color(0xFF6B4226),
+          foregroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF6B4226), // Botones marrón
-            foregroundColor: Colors.white, // Texto blanco
+            backgroundColor: Color(0xFF6B4226),
+            foregroundColor: Colors.white,
           ),
         ),
-        iconTheme: IconThemeData(
-          color: Color(0xFFA3B18A), // Verde suave para íconos
-        ),
+        iconTheme: IconThemeData(color: Color(0xFFA3B18A)),
       ),
       home: Builder(
         builder: (context) {
@@ -139,7 +46,9 @@ class _MyAppState extends State<MyApp> {
                 IconButton(
                   icon: Icon(Icons.list),
                   onPressed: () async {
-                    final fechas = await DatabaseHelper.obtenerFechasDisponibles();
+                    final fechas = kIsWeb
+                        ? await _obtenerFechasWeb()
+                        : await DatabaseHelper.obtenerFechasDisponibles();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -170,9 +79,13 @@ class _MyAppState extends State<MyApp> {
                           onPressed: marcado
                               ? null
                               : () {
-                                  DatabaseHelper.insertarRegistro(producto, "0", "Se acabó");
                                   setState(() {
                                     productosMarcados.add(producto);
+                                    registrosPendientes.add({
+                                      'producto': producto,
+                                      'cantidad': "0",
+                                      'unidad': "Se acabó",
+                                    });
                                   });
                                 },
                           child: Text("Se acabó"),
@@ -214,9 +127,13 @@ class _MyAppState extends State<MyApp> {
                                             onPressed: () {
                                               final cantidad = cantidadController.text;
                                               final unidad = unidadController.text;
-                                              DatabaseHelper.insertarRegistro(producto, cantidad, unidad);
                                               setState(() {
                                                 productosMarcados.add(producto);
+                                                registrosPendientes.add({
+                                                  'producto': producto,
+                                                  'cantidad': cantidad,
+                                                  'unidad': unidad,
+                                                });
                                               });
                                               Navigator.pop(context);
                                             },
@@ -237,23 +154,81 @@ class _MyAppState extends State<MyApp> {
             ),
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () async {
-                final registros = await DatabaseHelper.obtenerRegistros();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HistorialScreen(registros: registros),
-                  ),
-                );
+                final fecha = DateTime.now().toIso8601String();
+                if (kIsWeb) {
+                  await _guardarInventarioWeb(fecha, registrosPendientes);
+                  registrosPendientes.clear();
+                  final registros = await _obtenerInventariosWeb();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HistorialScreen(registros: registros),
+                    ),
+                  );
+                } else {
+                  for (var r in registrosPendientes) {
+                    await DatabaseHelper.insertarRegistro(
+                      r['producto']!,
+                      r['cantidad']!,
+                      r['unidad']!,
+                      fecha,
+                    );
+                  }
+                  registrosPendientes.clear();
+                  final registros = await DatabaseHelper.obtenerRegistros();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HistorialScreen(registros: registros),
+                    ),
+                  );
+                }
               },
               label: Text("Listo"),
               icon: Icon(Icons.save),
-              backgroundColor: Color(0xFF6B4226), // Botón flotante marrón
+              backgroundColor: Color(0xFF6B4226),
               foregroundColor: Colors.white,
             ),
           );
         },
       ),
     );
+  }
+
+  // Métodos para Web usando SharedPreferences
+  Future<void> _guardarInventarioWeb(String fecha, List<Map<String, String>> registros) async {
+    final prefs = await SharedPreferences.getInstance();
+    final inventarios = prefs.getStringList('inventarios') ?? [];
+    final inventario = registros.map((r) => "${r['producto']}|${r['cantidad']}|${r['unidad']}").join(';');
+    inventarios.add("$fecha::$inventario");
+    await prefs.setStringList('inventarios', inventarios);
+  }
+
+  Future<List<Map<String, dynamic>>> _obtenerInventariosWeb() async {
+    final prefs = await SharedPreferences.getInstance();
+    final inventarios = prefs.getStringList('inventarios') ?? [];
+    List<Map<String, dynamic>> resultado = [];
+    for (var inv in inventarios) {
+      final partes = inv.split("::");
+      final fecha = partes[0];
+      final productos = partes[1].split(';');
+      for (var p in productos) {
+        final datos = p.split('|');
+        resultado.add({
+          'producto': datos[0],
+          'cantidad': datos[1],
+          'unidad': datos[2],
+          'fecha': fecha,
+        });
+      }
+    }
+    return resultado;
+  }
+
+  Future<List<String>> _obtenerFechasWeb() async {
+    final prefs = await SharedPreferences.getInstance();
+    final inventarios = prefs.getStringList('inventarios') ?? [];
+    return inventarios.map((inv) => inv.split("::")[0]).toList();
   }
 }
 
@@ -300,7 +275,24 @@ class InventariosScreen extends StatelessWidget {
           return ListTile(
             title: Text("Inventario del $fecha"),
             onTap: () async {
-              final registros = await DatabaseHelper.obtenerRegistrosPorFecha(fecha);
+              final prefs = await SharedPreferences.getInstance();
+              final inventarios = prefs.getStringList('inventarios') ?? [];
+              List<Map<String, dynamic>> registros = [];
+              for (var inv in inventarios) {
+                final partes = inv.split("::");
+                if (partes[0] == fecha) {
+                  final productos = partes[1].split(';');
+                  for (var p in productos) {
+                    final datos = p.split('|');
+                    registros.add({
+                      'producto': datos[0],
+                      'cantidad': datos[1],
+                      'unidad': datos[2],
+                      'fecha': fecha,
+                    });
+                  }
+                }
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(
