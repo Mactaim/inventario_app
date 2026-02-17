@@ -77617,7 +77617,7 @@ case 1:return A.O(p.at(-1),r)}})
 return A.Q($async$xs,r)}}
 A.a4f.prototype={}
 A.xb.prototype={
-ao(){return new A.OE(A.d([],t.s),A.aB(t.N),A.d([],t.m0))}}
+ao(){return new A.OE(A.d(["Bolsas para hacer chantilly","Bolsas de basura grande","Queso dambo","Queso cheddar","Pechugas de pollo","Alitas","Tocino","Carne molida","Hot dog","Jam\xf3n ingl\xe9s","Chorizo","Pan multigrano","Pan de molde blanco","Croissant","Ciabatta","Pan hamburguesa","Pan broche","Papa","Palta","Tomate","Lechuga","Cebolla","Apio","Albaca","Culantro","Lim\xf3n","Mango","Pi\xf1a fresca","Pi\xf1a en lata","Papaya","Fresa fresca","Fresa para waffle","Pl\xe1tano","Lucuma","Maracuy\xe1 fresca","Maracuy\xe1 en caja","Jugo de maracuy\xe1","Az\xfacar blanca","Az\xfacar rubia","Az\xfacar glass","Az\xfacar impalpable","Harina","Avena","Miel","Aceite","Oliva","Vinagre","Or\xe9gano","Vainilla","Huevo","Leche","Mantequilla","Chantilly","Fudge","Ketchup balde","Mostaza balde","Salsa BBQ","Salsa acevichada","Salsa de tomate","Jarabe de goma","Jarabe de menta","Jarabe de menta (duplicado corregido)","Matcha","Togarashi","Ayud\xedn","Taper chico para llevar","Bolsa papel delivery (peque\xf1o y grande)","Bolsa celof\xe1n 7x10","Bolsa para llevar","Vasos acr\xedlicos","Vasos de jugo transparentes 18 oz","Vasito de helados","Vaso de frappe","Cucharitas descartables","Sorbetes para jugo","Ca\xf1as frappe","Servilletas","Papel manteca","Papel toalla cocina","Papel toalla ba\xf1o","Pa\xf1itos amarillos","Galleta Oreo","Rosquitas","Pecanas","Bouls para producci\xf3n","Lapicero azul o negro","Cuaderno para lista","Hielo","Agua con gas","Agua sin gas","Coca Cola","Inca Kola"],t.s),A.aB(t.N),A.d([],t.m0))}}
 A.OE.prototype={
 O(a){var s=4285219366,r=null,q=A.aJ(s),p=A.aJ(4294305491)
 return new A.wX(new A.dr(new A.afa(this),r),"Inventario Diario",A.rF(A.aoi(A.aJ(s),r,r,B.k),r,r,new A.q4(A.ayW(r,r,A.aJ(s),r,r,r,r,r,r,B.k,r,r,r,r,r,r,r,r,r,r)),new A.cs(r,r,r,r,r,A.aJ(4288917898),r,r,r),q,p,r),r)},
@@ -77670,7 +77670,7 @@ return A.Q($async$ve,r)}}
 A.afa.prototype={
 $1(a){var s,r,q=null,p=A.dh("Inventario Diario",q,q,q,q,q,q),o=this.a
 p=A.akI(A.d([A.alp(q,q,A.Hb(B.Db,q,q),q,q,new A.af7(o,a),q,q,q)],t.E),p)
-s=A.alA(new A.af8(o),0)
+s=A.alA(new A.af8(o),92)
 r=A.dh("Listo",q,q,q,q,q,q)
 return A.am0(p,s,new A.q9(A.Hb(B.De,q,q),B.k,A.aJ(4285219366),new A.af9(o,a),r,q))},
 $S:478}
@@ -77723,7 +77723,7 @@ A.af1.prototype={
 $1(a){var s,r=null,q=$.ao(),p=new A.zw(B.kz,q),o=new A.zw(B.kz,q)
 q=this.b
 s=t.E
-return new A.po(A.dh("Registrar cantidad de "+A.k(q),r,r,r,r,r,r),A.VU(A.d([A.arq(p,A.alt(r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,"Cantidad",!0,!0,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r),B.MP),A.arq(o,A.alt(r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,"Unidad (ej: kilos, litros)",!0,!0,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r),r)],s),B.br,B.bw,B.c9),A.d([A.amg(A.dh("Cancelar",r,r,r,r,r,r),new A.af_(a),r),A.al9(A.dh("Guardar",r,r,r,r,r,r),new A.af0(this.a,p,o,q,a))],s),r)},
+return new A.po(A.dh("Registrar cantidad de "+q,r,r,r,r,r,r),A.VU(A.d([A.arq(p,A.alt(r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,"Cantidad",!0,!0,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r),B.MP),A.arq(o,A.alt(r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,"Unidad (ej: kilos, litros)",!0,!0,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r),r)],s),B.br,B.bw,B.c9),A.d([A.amg(A.dh("Cancelar",r,r,r,r,r,r),new A.af_(a),r),A.al9(A.dh("Guardar",r,r,r,r,r,r),new A.af0(this.a,p,o,q,a))],s),r)},
 $S:481}
 A.af_.prototype={
 $0(){A.jB(this.a,!1).G5(null)},
